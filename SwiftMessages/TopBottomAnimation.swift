@@ -82,13 +82,25 @@ public class TopBottomAnimation: NSObject, Animator {
         }
         view.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(view)
-        view.leadingAnchor.constraint(equalTo: container.leadingAnchor).isActive = true
-        view.trailingAnchor.constraint(equalTo: container.trailingAnchor).isActive = true
-        switch style {
-        case .top:
-            view.topAnchor.constraint(equalTo: container.topAnchor, constant: -bounceOffset).isActive = true
-        case .bottom:
-            view.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: bounceOffset).isActive = true
+        if #available(iOS 9.0, *) {
+            view.leadingAnchor.constraint(equalTo: container.leadingAnchor).isActive = true
+            view.trailingAnchor.constraint(equalTo: container.trailingAnchor).isActive = true
+            switch style {
+            case .top:
+                view.topAnchor.constraint(equalTo: container.topAnchor, constant: -bounceOffset).isActive = true
+            case .bottom:
+                view.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: bounceOffset).isActive = true
+            }
+        } else {
+            // Fallback on earlier versions
+            NSLayoutConstraint(item: view, attribute: .leading, relatedBy: .equal, toItem: container, attribute: .leadingMargin, multiplier: 1.0, constant: 0).isActive = true
+            NSLayoutConstraint(item: view, attribute: .trailing, relatedBy: .equal, toItem: container, attribute: .trailingMargin, multiplier: 1.0, constant: 0).isActive = true
+            switch style {
+            case .top:
+                NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: container, attribute: .topMargin, multiplier: 1.0, constant: -bounceOffset).isActive = true
+            case .bottom:
+                NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: container, attribute: .bottomMargin, multiplier: 1.0, constant: bounceOffset).isActive = true
+            }
         }
         // Important to layout now in order to get the right safe area insets
         container.layoutIfNeeded()

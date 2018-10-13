@@ -337,8 +337,14 @@ class Presenter: NSObject {
             } else {
                 containerView.addSubview(maskingView)
             }
-            maskingView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-            maskingView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+            if #available(iOS 9.0, *) {
+                maskingView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+                maskingView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+            } else {
+                // Fallback on earlier versions
+                NSLayoutConstraint(item: maskingView, attribute: .leading, relatedBy: .equal, toItem: containerView, attribute: .leadingMargin, multiplier: 1.0, constant: 0).isActive = true
+                NSLayoutConstraint(item: maskingView, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailingMargin, multiplier: 1.0, constant: 0).isActive = true
+            }
             topLayoutConstraint(view: maskingView, containerView: containerView, viewController: presentationContext.viewControllerValue()).isActive = true
             bottomLayoutConstraint(view: maskingView, containerView: containerView, viewController: presentationContext.viewControllerValue()).isActive = true
             // Update the container view's layout in order to know the masking view's frame

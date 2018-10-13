@@ -74,10 +74,18 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
     open func installContentView(_ contentView: UIView, insets: UIEdgeInsets = UIEdgeInsets.zero) {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.addSubview(contentView)
-        contentView.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: insets.top).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -insets.bottom).isActive = true
-        contentView.leftAnchor.constraint(equalTo: backgroundView.leftAnchor, constant: insets.left).isActive = true
-        contentView.rightAnchor.constraint(equalTo: backgroundView.rightAnchor, constant: -insets.right).isActive = true
+        if #available(iOS 9.0, *) {
+            contentView.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: insets.top).isActive = true
+            contentView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -insets.bottom).isActive = true
+            contentView.leftAnchor.constraint(equalTo: backgroundView.leftAnchor, constant: insets.left).isActive = true
+            contentView.rightAnchor.constraint(equalTo: backgroundView.rightAnchor, constant: -insets.right).isActive = true
+        } else {
+            // Fallback on earlier versions
+            NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: backgroundView, attribute: .topMargin, multiplier: 1.0, constant: insets.top).isActive = true
+            NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: backgroundView, attribute: .bottomMargin, multiplier: 1.0, constant: insets.bottom).isActive = true
+            NSLayoutConstraint(item: contentView, attribute: .left, relatedBy: .equal, toItem: backgroundView, attribute: .leftMargin, multiplier: 1.0, constant: insets.left).isActive = true
+            NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: backgroundView, attribute: .rightMargin, multiplier: 1.0, constant: insets.right).isActive = true
+        }
     }
 
     /**
@@ -96,10 +104,18 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
         }
         addSubview(backgroundView)
         self.backgroundView = backgroundView
-        backgroundView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: insets.top).isActive = true
-        backgroundView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -insets.bottom).isActive = true
-        backgroundView.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor, constant: insets.left).isActive = true
-        backgroundView.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor, constant: -insets.right).isActive = true
+        if #available(iOS 9.0, *) {
+            backgroundView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: insets.top).isActive = true
+            backgroundView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -insets.bottom).isActive = true
+            backgroundView.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor, constant: insets.left).isActive = true
+            backgroundView.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor, constant: -insets.right).isActive = true
+        } else {
+            // Fallback on earlier versions
+            NSLayoutConstraint(item: backgroundView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .topMargin, multiplier: 1.0, constant: insets.top).isActive = true
+            NSLayoutConstraint(item: backgroundView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottomMargin, multiplier: 1.0, constant: insets.bottom).isActive = true
+            NSLayoutConstraint(item: backgroundView, attribute: .left, relatedBy: .equal, toItem: self, attribute: .leftMargin, multiplier: 1.0, constant: insets.left).isActive = true
+            NSLayoutConstraint(item: backgroundView, attribute: .right, relatedBy: .equal, toItem: self, attribute: .rightMargin, multiplier: 1.0, constant: insets.right).isActive = true
+        }
         installTapRecognizer()
     }
 
@@ -120,10 +136,18 @@ open class BaseView: UIView, BackgroundViewable, MarginAdjustable {
         }
         addSubview(backgroundView)
         self.backgroundView = backgroundView
-        backgroundView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top).isActive = true
-        backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom).isActive = true
-        backgroundView.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor, constant: insets.left).isActive = true
-        backgroundView.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor, constant: -insets.right).isActive = true
+        if #available(iOS 9.0, *) {
+            backgroundView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top).isActive = true
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom).isActive = true
+            backgroundView.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor, constant: insets.left).isActive = true
+            backgroundView.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor, constant: -insets.right).isActive = true
+        } else {
+            // Fallback on earlier versions
+            NSLayoutConstraint(item: backgroundView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .topMargin, multiplier: 1.0, constant: insets.top).isActive = true
+            NSLayoutConstraint(item: backgroundView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottomMargin, multiplier: 1.0, constant: insets.bottom).isActive = true
+            NSLayoutConstraint(item: backgroundView, attribute: .left, relatedBy: .equal, toItem: self, attribute: .leftMargin, multiplier: 1.0, constant: insets.left).isActive = true
+            NSLayoutConstraint(item: backgroundView, attribute: .right, relatedBy: .equal, toItem: self, attribute: .rightMargin, multiplier: 1.0, constant: insets.right).isActive = true
+        }
         installTapRecognizer()
     }
 

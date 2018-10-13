@@ -222,12 +222,25 @@ extension MessageView {
         if let iconImageView = iconImageView { views.append(iconImageView) }
         if let iconLabel = iconLabel { views.append(iconLabel) }
         views.forEach {
-            let constraints = [$0.heightAnchor.constraint(equalToConstant: size.height),
-                               $0.widthAnchor.constraint(equalToConstant: size.width)]
-            constraints.forEach { $0.priority = UILayoutPriority(999.0) }
-            $0.addConstraints(constraints)
-            if let contentMode = contentMode {
-                $0.contentMode = contentMode
+            if #available(iOS 9.0, *) {
+                let constraints = [$0.heightAnchor.constraint(equalToConstant: size.height),
+                                   $0.widthAnchor.constraint(equalToConstant: size.width)]
+                constraints.forEach { $0.priority = UILayoutPriority(999.0) }
+                $0.addConstraints(constraints)
+                if let contentMode = contentMode {
+                    $0.contentMode = contentMode
+                }
+            } else {
+                // Fallback on earlier versions
+                let constraints = [
+                    NSLayoutConstraint(item: $0, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: size.height),
+                    NSLayoutConstraint(item: $0, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: size.width)
+                ]
+                constraints.forEach { $0.priority = UILayoutPriority(999.0) }
+                $0.addConstraints(constraints)
+                if let contentMode = contentMode {
+                    $0.contentMode = contentMode
+                }
             }
         }
     }

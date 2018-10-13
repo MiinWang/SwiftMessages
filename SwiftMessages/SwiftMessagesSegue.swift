@@ -301,10 +301,18 @@ extension SwiftMessagesSegue {
             do {
                 toView.translatesAutoresizingMaskIntoConstraints = false
                 segue.containerView.addSubview(toView)
-                toView.topAnchor.constraint(equalTo: segue.containerView.topAnchor).isActive = true
-                toView.bottomAnchor.constraint(equalTo: segue.containerView.bottomAnchor).isActive = true
-                toView.leftAnchor.constraint(equalTo: segue.containerView.leftAnchor).isActive = true
-                toView.rightAnchor.constraint(equalTo: segue.containerView.rightAnchor).isActive = true
+                if #available(iOS 9.0, *) {
+                    toView.topAnchor.constraint(equalTo: segue.containerView.topAnchor).isActive = true
+                    toView.bottomAnchor.constraint(equalTo: segue.containerView.bottomAnchor).isActive = true
+                    toView.leftAnchor.constraint(equalTo: segue.containerView.leftAnchor).isActive = true
+                    toView.rightAnchor.constraint(equalTo: segue.containerView.rightAnchor).isActive = true
+                } else {
+                    // Fallback on earlier versions
+                    NSLayoutConstraint(item: toView, attribute: .top, relatedBy: .equal, toItem: segue.containerView, attribute: .topMargin, multiplier: 1.0, constant: 0).isActive = true
+                    NSLayoutConstraint(item: toView, attribute: .bottom, relatedBy: .equal, toItem: segue.containerView, attribute: .bottomMargin, multiplier: 1.0, constant: 0).isActive = true
+                    NSLayoutConstraint(item: toView, attribute: .left, relatedBy: .equal, toItem: segue.containerView, attribute: .leftMargin, multiplier: 1.0, constant: 0).isActive = true
+                    NSLayoutConstraint(item: toView, attribute: .right, relatedBy: .equal, toItem: segue.containerView, attribute: .rightMargin, multiplier: 1.0, constant: 0).isActive = true
+                }
             }
             // Install the `toView` into the message view.
             switch segue.containment {
